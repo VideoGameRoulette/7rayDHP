@@ -4,9 +4,6 @@ const JSON_PORT = 7190;
 const POLLING_RATE = 333;
 var JSON_ENDPOINT = `http://${JSON_ADDRESS}:${JSON_PORT}/`;
 
-// PARAM VARIABLES
-var ShowBossOnly = true;
-
 window.onload = function () {
 	getData();
 	setInterval(getData, POLLING_RATE);
@@ -262,20 +259,12 @@ function RECVXStats(data) {
 }
 
 function RECVXEHPBars(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	var filterdEnemies = data.Enemy.filter(m => { return (m.IsAlive) });
 	filterdEnemies.sort(function (a, b) {
 		return Asc(a.Percentage, b.Percentage) || Desc(a.CurrentHP, b.CurrentHP);
 	}).forEach(function (item, index, arr) {
-		if (!ShowBossOnly && item.IsAlive) {
-			mainContainer.innerHTML += `<div class="enemyhp"><div class="enemyhpbar danger" style="width:${(item.Percentage * 100).toFixed(1)}%">
-			<div id="currentenemyhp">${item.TypeName}: ${item.CurrentHP} / ${item.MaximumHP}</div><div class="red" id="percentenemyhp">${(item.Percentage * 100).toFixed(1)}%</div></div></div>`;
-		}
-		else if (ShowBossOnly && item.IsAlive && item.IsBoss) {
+		if (item.IsAlive) {
 			mainContainer.innerHTML += `<div class="enemyhp"><div class="enemyhpbar danger" style="width:${(item.Percentage * 100).toFixed(1)}%">
 			<div id="currentenemyhp">${item.TypeName}: ${item.CurrentHP} / ${item.MaximumHP}</div><div class="red" id="percentenemyhp">${(item.Percentage * 100).toFixed(1)}%</div></div></div>`;
 		}
@@ -284,31 +273,19 @@ function RECVXEHPBars(data) {
 
 // ENEMY HP FUNCTIONS
 function EnemyHPBars(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	var filterdEnemies = data.EnemyHealth.filter(m => { return (m.IsAlive) });
 	filterdEnemies.sort(function (a, b) {
 		return Asc(a.Percentage, b.Percentage) || Desc(a.CurrentHP, b.CurrentHP);
 	}).forEach(function (item, index, arr) {
-		if (!ShowBossOnly && item.IsAlive) {
+		if (item.IsAlive) {
 			mainContainer.innerHTML += `<div class="enemyhp"><div class="enemyhpbar danger" style="width:${(item.Percentage * 100).toFixed(1)}%">
 			<div id="currentenemyhp">${item.CurrentHP} / ${item.MaximumHP}</div><div class="red" id="percentenemyhp">${(item.Percentage * 100).toFixed(1)}%</div></div></div>`;
-		}
-		else if (ShowBossOnly && item.IsAlive && item.IsBoss) {
-			mainContainer.innerHTML += `<div class="enemyhp"><div class="enemyhpbar danger" style="width:${(item.Percentage * 100).toFixed(1)}%">
-			<div id="currentenemyhp">${item.BossName}: ${item.CurrentHP} / ${item.MaximumHP}</div><div class="red" id="percentenemyhp">${(item.Percentage * 100).toFixed(1)}%</div></div></div>`;
 		}
 	});
 }
 
 function EnemyHPRE0(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	var filterdEnemies = data.EnemyHealth.filter(m => { return (m.IsAlive && !m.IsPlayer) });
 	filterdEnemies.sort(function (a, b) {
@@ -322,10 +299,6 @@ function EnemyHPRE0(data) {
 }
 
 function EnemyHPRE1(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	var filterdEnemies = data.EnemyHealth.filter(m => { return (m.IsAlive) });
 	filterdEnemies.sort(function (a, b) {
@@ -341,16 +314,12 @@ function EnemyHPRE1(data) {
 }
 
 function EnemyHPRE2(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	var filterdEnemies = data.EnemyHealth.filter(m => { return (m.IsAlive) });
 	filterdEnemies.sort(function (a, b) {
 		return Asc(a.Percentage, b.Percentage) || Desc(a.CurrentHP, b.CurrentHP);
 	}).forEach(function (item, index, arr) {
-		if (!ShowBossOnly && item.IsAlive) {
+		if (item.IsAlive) {
 			if (item.IsBoss) {
 				let percent = item.CurrentHP / item.MaximumHP * 100;
 				mainContainer.innerHTML += `
@@ -368,24 +337,10 @@ function EnemyHPRE2(data) {
 				</div>`;
 			}
 		}
-		else if (ShowBossOnly && item.IsAlive && item.IsBoss) {
-			let percent = item.CurrentHP / item.MaximumHP * 100;
-			mainContainer.innerHTML += `
-			<div class="enemyhp">
-				<div class="enemyhpbar danger" style="width:${percent.toFixed(1)}%">
-					<div id="currentenemyhp">${item.BossName}: ${item.CurrentHP} / ${item.MaximumHP}</div>
-					<div class="red" id="percentenemyhp">${percent.toFixed(1)}%</div>
-				</div>
-			</div>`;
-		}
 	});
 }
 
 function NemesisHPClassic(data) {
-	if (HideEnemies)
-	{
-		return;
-	}
 	let mainContainer = document.getElementById("srtQueryData");
 	if (data.Nemesis.IsAlive) {
 		mainContainer.innerHTML += `
